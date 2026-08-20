@@ -1,4 +1,4 @@
-name: Deploy Website to Amazon EC2
+name: Deploy Website using Docker to Amazon EC2
 
 on:
   push:
@@ -7,32 +7,39 @@ on:
 
 jobs:
   deploy:
-    name: Build & Transfer Files
+    name: Build & Deploy Container
     runs-on: ubuntu-latest
     
     steps:
       - name: Checkout Repository Code
         uses: actions/checkout@v4
 
-      - name: SSH Deploy Code to EC2 Instance
+      - name: SSH Deploy Files to EC2 Instance
         uses: easingthemes/ssh-deploy@main
         with:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
           ARGS: "-rlgoDzvc -i --delete"
-          SOURCE: "web/" # Upload the web folder contents
+          SOURCE: "./" # Upload all files (including Dockerfile and web folder)
           REMOTE_HOST: ${{ secrets.EC2_HOST }}
           REMOTE_USER: ${{ secrets.EC2_USERNAME }}
-          TARGET: "/var/www/html" # Target folder on EC2
-          EXCLUDE: "/dist/, /node_modules/"
+          TARGET: "/home/ubuntu/aws-deploy-test" # Destination folder on server
+          EXCLUDE: "/.git/, /.github/"
 
-      - name: Execute Server Reload Commands
+      - name: Build and Run Docker Container on EC2
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            echo "Successfully deployed code files to target /var/www/html."
-            echo "Reloading Nginx server to pick up new changes..."
-            sudo systemctl reload nginx
-            echo "Nginx server reload completed successfully."
+            echo "Building new Docker image on the server..."
+            sudo docker build -t aws-deploy-test /home/ubuntu/aws-deploy-test
+            
+            echo "Stopping old container if running..."
+            sudo docker stop aws-deploy-container || true
+            sudo docker rm aws-deploy-container || true
+            
+            echo "Starting new container on port 80..."
+            sudo docker run -d --name aws-deploy-container -p 80:80 aws-deploy-test
+            
+            echo "Deployment finished successfully!"
