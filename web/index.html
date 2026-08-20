@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,6 +18,7 @@
       align-items: center;
       justify-content: center;
     }
+
     .card {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
@@ -24,10 +26,11 @@
       padding: 2.5rem;
       border-radius: 16px;
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
       max-width: 400px;
       width: 90%;
     }
+
     h1 {
       margin-top: 0;
       background: linear-gradient(to right, #38bdf8, #818cf8);
@@ -35,10 +38,12 @@
       -webkit-text-fill-color: transparent;
       font-size: 2rem;
     }
+
     p {
       color: #cbd5e1;
       margin-bottom: 2rem;
     }
+
     .btn {
       background: #6366f1;
       color: white;
@@ -51,16 +56,19 @@
       transition: all 0.2s ease;
       box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
     }
+
     .btn:hover {
       background: #4f46e5;
       transform: translateY(-2px);
     }
+
     .counter-display {
       font-size: 3rem;
       font-weight: 800;
       margin: 1.5rem 0;
       color: #38bdf8;
     }
+
     .badge {
       display: inline-block;
       margin-top: 1.5rem;
@@ -75,14 +83,16 @@
     }
   </style>
 </head>
+
 <body>
   <div class="card">
-    <h1>Deployed Web App</h1>
-    <p>This is the interactive client application. When you push updates, GitHub Actions automatically builds and deploys them to EC2!</p>
-    
+    <h1>Deployed Web App by Kira</h1>
+    <p>This is the interactive client application. When you push updates, GitHub Actions automatically builds and
+      deploys them to EC2!</p>
+
     <div class="counter-display" id="counter">0</div>
     <button class="btn" id="click-btn">Click Me!</button>
-    
+
     <div>
       <span class="badge">Pipeline Verified</span>
     </div>
@@ -92,11 +102,11 @@
     let count = 0;
     const counter = document.getElementById('counter');
     const button = document.getElementById('click-btn');
-    
+
     button.addEventListener('click', () => {
       count++;
       counter.innerText = count;
-      
+
       // Dynamic scaling animation on click
       counter.style.transform = 'scale(1.2)';
       setTimeout(() => {
@@ -105,4 +115,5 @@
     });
   </script>
 </body>
+
 </html>
