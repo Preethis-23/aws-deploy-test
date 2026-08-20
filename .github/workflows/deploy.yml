@@ -1,0 +1,38 @@
+name: Deploy Website to Amazon EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Build & Transfer Files
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Repository Code
+        uses: actions/checkout@v4
+
+      - name: SSH Deploy Code to EC2 Instance
+        uses: easingthemes/ssh-deploy@main
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          ARGS: "-rlgoDzvc -i --delete"
+          SOURCE: "web/" # Upload the web folder contents
+          REMOTE_HOST: ${{ secrets.EC2_HOST }}
+          REMOTE_USER: ${{ secrets.EC2_USERNAME }}
+          TARGET: "/var/www/html" # Target folder on EC2
+          EXCLUDE: "/dist/, /node_modules/"
+
+      - name: Execute Server Reload Commands
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "Successfully deployed code files to target /var/www/html."
+            echo "Reloading Nginx server to pick up new changes..."
+            sudo systemctl reload nginx
+            echo "Nginx server reload completed successfully."

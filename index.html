@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EC2 Deployment & CI/CD Pipeline Wizard</title>
+  <meta name="description" content="Interactive guide and simulator for setting up CI/CD pipelines (GitHub Actions & Jenkins) to deploy web applications on AWS EC2.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Sidebar Navigation -->
+  <aside>
+    <a href="#" class="brand">
+      <div class="brand-logo">C</div>
+      <span class="brand-name">CI/CD Deployer</span>
+    </a>
+    
+    <nav>
+      <ul class="nav-links">
+        <li class="nav-item active" data-section="architecture">
+          <a href="#architecture">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            Architecture
+          </a>
+        </li>
+        <li class="nav-item" data-section="checklist">
+          <a href="#checklist">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            Requirements
+          </a>
+        </li>
+        <li class="nav-item" data-section="guide">
+          <a href="#guide">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            Setup Guide
+          </a>
+        </li>
+        <li class="nav-item" data-section="generator">
+          <a href="#generator">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            Config Generator
+          </a>
+        </li>
+        <li class="nav-item" data-section="simulator">
+          <a href="#simulator">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg>
+            Pipeline Simulator
+          </a>
+        </li>
+      </ul>
+    </nav>
+    
+    <div class="sidebar-footer">
+      <div class="footer-status">
+        <div class="status-dot"></div>
+        <span>Interactive Mode Active</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Display -->
+  <main>
+    <header>
+      <div>
+        <h1 id="page-title">CI/CD EC2 Deployer</h1>
+        <div class="header-subtitle" id="page-subtitle">Understand, prepare, and simulate your pipeline deployment</div>
+      </div>
+      <div class="app-version">v1.0.0</div>
+    </header>
+
+    <!-- SECTION: ARCHITECTURE -->
+    <section id="architecture" class="section active">
+      <div class="card">
+        <h2 class="card-title">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+          Deployment Architecture Flow
+        </h2>
+        <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+          Deploying an interactive site from your local machine to AWS EC2 via modern CI/CD requires automation. Here is how your code flows from your editor to the live web server on EC2.
+        </p>
+
+        <div class="pipeline-diagram">
+          <div class="diagram-node completed" id="diag-dev">
+            <div class="node-icon">💻</div>
+            <div class="node-label">Developer Commit</div>
+          </div>
+          <div class="diagram-connector"><div class="diagram-connector-progress" id="conn-1" style="width: 100%;"></div></div>
+          
+          <div class="diagram-node active" id="diag-git">
+            <div class="node-icon">🐙</div>
+            <div class="node-label">GitHub Repo</div>
+          </div>
+          <div class="diagram-connector"><div class="diagram-connector-progress" id="conn-2"></div></div>
+          
+          <div class="diagram-node" id="diag-ci">
+            <div class="node-icon">⚙️</div>
+            <div class="node-label">CI/CD Runner</div>
+          </div>
+          <div class="diagram-connector"><div class="diagram-connector-progress" id="conn-3"></div></div>
+          
+          <div class="diagram-node" id="diag-ec2">
+            <div class="node-icon">☁️</div>
+            <div class="node-label">AWS EC2 Server</div>
+          </div>
+          <div class="diagram-connector"><div class="diagram-connector-progress" id="conn-4"></div></div>
+          
+          <div class="diagram-node" id="diag-live">
+            <div class="node-icon">🚀</div>
+            <div class="node-label">Live Web App</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="tab-container">
+          <button class="tab-btn active" id="btn-tab-actions">GitHub Actions (Recommended)</button>
+          <button class="tab-btn" id="btn-tab-jenkins">Jenkins Server</button>
+        </div>
+
+        <div id="tab-content-actions">
+          <h3>Why GitHub Actions is best for this setup:</h3>
+          <div class="compare-grids">
+            <div class="compare-card">
+              <h4>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                Advantages
+              </h4>
+              <ul>
+                <li><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Fully Hosted: No need to run or manage a dedicated build server.</li>
+                <li><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Secure Secrets: Built-in encrypted secrets for storing EC2 SSH keys.</li>
+                <li><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>GitHub Native: Triggers automatically on git events (push, PR).</li>
+                <li><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Free Tier: Extremely generous free minutes for public & private repos.</li>
+              </ul>
+            </div>
+            <div class="compare-card">
+              <h4>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                What it requires from you
+              </h4>
+              <ul>
+                <li><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>A GitHub repository containing your site files.</li>
+                <li><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>A configuration YAML file stored in <code>.github/workflows/deploy.yml</code>.</li>
+                <li><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Configured Repository Secrets (Host IP, SSH Private Key, Username).</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div id="tab-content-jenkins" style="display: none;">
+          <h3>Why use Jenkins (Genkins):</h3>
+          <div class="compare-grids">
+            <div class="compare-card">
+              <h4>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                Advantages
+              </h4>
+              <ul>
+                <li><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Self-Hosted Control: Complete control over the build environment.</li>
+                <li><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Extensible: Thousands of plugins available for almost any integration.</li>
+                <li><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>On-Premise: Perfect for closed security networks/enterprise environments.</li>
+              </ul>
+            </div>
+            <div class="compare-card">
+              <h4>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                What it requires from you
+              </h4>
+              <ul>
+                <li><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>A dedicated server (like a separate EC2) running Jenkins 24/7.</li>
+                <li><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Installing Java, Jenkins packages, and dependencies on the server.</li>
+                <li><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Setting up credentials and configuring a webhook in your GitHub Repo.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: REQUIREMENTS CHECKLIST -->
+    <section id="checklist" class="section">
+      <div class="card">
+        <h2 class="card-title">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+          Deployment Requirements Checklist
+        </h2>
+        <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+          To run a successful pipeline, configure these resources. Click the items to mark them completed as you set them up.
+        </p>
+
+        <div class="checklist-item">
+          <div class="checklist-info">
+            <div class="checklist-checkbox" id="chk-aws" onclick="toggleCheck('chk-aws')">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="checklist-text" id="chk-aws-text">
+              <h4>AWS Account & Access</h4>
+              <p>Active AWS Console access to create EC2 instances and key pairs.</p>
+            </div>
+          </div>
+          <span class="badge badge-required">Required</span>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-info">
+            <div class="checklist-checkbox" id="chk-ec2" onclick="toggleCheck('chk-ec2')">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="checklist-text" id="chk-ec2-text">
+              <h4>EC2 Linux Instance Running</h4>
+              <p>An active EC2 running Ubuntu 22.04 LTS or Amazon Linux 2 with a Public IP address.</p>
+            </div>
+          </div>
+          <span class="badge badge-required">Required</span>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-info">
+            <div class="checklist-checkbox" id="chk-ssh" onclick="toggleCheck('chk-ssh')">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="checklist-text" id="chk-ssh-text">
+              <h4>SSH Private Key (PEM format)</h4>
+              <p>The SSH Key file (.pem) used to connect to your EC2 instance from a terminal.</p>
+            </div>
+          </div>
+          <span class="badge badge-required">Required</span>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-info">
+            <div class="checklist-checkbox" id="chk-github" onclick="toggleCheck('chk-github')">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="checklist-text" id="chk-github-text">
+              <h4>GitHub Repository</h4>
+              <p>A repository on GitHub containing your website/application source code.</p>
+            </div>
+          </div>
+          <span class="badge badge-required">Required</span>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-info">
+            <div class="checklist-checkbox" id="chk-webserver" onclick="toggleCheck('chk-webserver')">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="checklist-text" id="chk-webserver-text">
+              <h4>Nginx/Node.js Pre-installed on EC2</h4>
+              <p>A web server or engine installed on the EC2 instance to serve your static app files.</p>
+            </div>
+          </div>
+          <span class="badge badge-optional">Optional</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: SETUP GUIDE -->
+    <section id="guide" class="section">
+      <div class="card">
+        <h2 class="card-title">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          AWS EC2 & CI/CD Walkthrough Wizard
+        </h2>
+
+        <div class="steps-layout">
+          <!-- Step Selector -->
+          <div class="steps-list">
+            <button class="step-nav-btn active" id="btn-step-1" onclick="navigateToStep(1)">
+              <div class="step-nav-info">
+                <span class="step-nav-num">Step 1</span>
+                <span class="step-nav-title">Initialize App</span>
+              </div>
+              <div class="step-nav-status" id="status-step-1">1</div>
+            </button>
+            <button class="step-nav-btn" id="btn-step-2" onclick="navigateToStep(2)">
+              <div class="step-nav-info">
+                <span class="step-nav-num">Step 2</span>
+                <span class="step-nav-title">Launch AWS EC2</span>
+              </div>
+              <div class="step-nav-status" id="status-step-2">2</div>
+            </button>
+            <button class="step-nav-btn" id="btn-step-3" onclick="navigateToStep(3)">
+              <div class="step-nav-info">
+                <span class="step-nav-num">Step 3</span>
+                <span class="step-nav-title">Prepare EC2 Server</span>
+              </div>
+              <div class="step-nav-status" id="status-step-3">3</div>
+            </button>
+            <button class="step-nav-btn" id="btn-step-4" onclick="navigateToStep(4)">
+              <div class="step-nav-info">
+                <span class="step-nav-num">Step 4</span>
+                <span class="step-nav-title">GitHub Secrets</span>
+              </div>
+              <div class="step-nav-status" id="status-step-4">4</div>
+            </button>
+          </div>
+
+          <!-- Step Details Content -->
+          <div class="card step-content-card" style="background: rgba(255,255,255,0.01); border: 1px solid var(--border-color); margin-bottom: 0;">
+            <div class="step-body">
+              
+              <!-- STEP 1 CONTENT -->
+              <div class="step-pane" id="step-pane-1">
+                <h3>Initialize Sample Application</h3>
+                <p>
+                  Before setting up the pipeline, we need a simple interactive website/application to deploy. I can create a lightweight, responsive, and interactive site file directly in your workspace.
+                </p>
+                <div class="alert alert-info">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                  <div>
+                    <strong>Action Required:</strong> Click the button below to write a sample app (<code>index.html</code> inside a new <code>/web</code> directory) that you will use to test your CI/CD pipeline.
+                  </div>
+                </div>
+                <button class="btn btn-primary" id="btn-create-app" onclick="createSampleAppFiles()">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  Generate Sample App in Workspace
+                </button>
+                <div id="app-creation-result" class="mt-4" style="font-family: var(--font-mono); font-size: 0.85rem;"></div>
+              </div>
+
+              <!-- STEP 2 CONTENT -->
+              <div class="step-pane" id="step-pane-2" style="display: none;">
+                <h3>Launch AWS EC2 Instance</h3>
+                <p>
+                  Log into your AWS Management Console and follow these steps to provision your deployment server:
+                </p>
+                <ul>
+                  <li>Open the <strong>EC2 Dashboard</strong> and click <strong>Launch Instance</strong>.</li>
+                  <li><strong>OS:</strong> Select <code>Ubuntu Server 22.04 LTS</code> (Free Tier eligible).</li>
+                  <li><strong>Instance Type:</strong> Choose <code>t2.micro</code> (or <code>t3.micro</code>).</li>
+                  <li><strong>Key Pair:</strong> Generate a new key pair, choose <code>RSA</code> and <code>.pem</code> format. Download and store this file safely (e.g., <code>aws-key.pem</code>).</li>
+                  <li><strong>Network Settings:</strong> Create a new Security Group:
+                    <ul>
+                      <li>Allow <strong>SSH</strong> (Port 22) from your IP.</li>
+                      <li>Allow <strong>HTTP</strong> (Port 80) from Anywhere (0.0.0.0/0) to serve the site.</li>
+                    </ul>
+                  </li>
+                </ul>
+                <div class="alert alert-info" style="margin-top: 1rem;">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                  <div>
+                    <strong>Pro Tip:</strong> Copy the <strong>Public IPv4 Address</strong> of your launched instance. You'll need it for the configurations and pipeline.
+                  </div>
+                </div>
+              </div>
+
+              <!-- STEP 3 CONTENT -->
+              <div class="step-pane" id="step-pane-3" style="display: none;">
+                <h3>Configure EC2 Web Server</h3>
+                <p>
+                  Connect to your newly launched EC2 instance using SSH to install a web server (Nginx) to host the static files. Run these commands in your local shell terminal:
+                </p>
+                
+                <div class="console-box" style="margin-bottom: 1.5rem;">
+                  <div class="console-header">
+                    <div class="console-dots">
+                      <div class="console-dot red"></div>
+                      <div class="console-dot yellow"></div>
+                      <div class="console-dot green"></div>
+                    </div>
+                    <span class="console-title">SSH Terminal</span>
+                  </div>
+                  <div class="console-body" style="height: 180px;">
+                    <div class="console-log-line cmd"># 1. Update permissions on your downloaded private key</div>
+                    <div class="console-log-line">chmod 400 path/to/aws-key.pem</div>
+                    <div class="console-log-line cmd"># 2. Connect to the EC2 Instance</div>
+                    <div class="console-log-line">ssh -i path/to/aws-key.pem ubuntu@&lt;YOUR_EC2_PUBLIC_IP&gt;</div>
+                    <div class="console-log-line cmd"># 3. Update packages and install Nginx web server</div>
+                    <div class="console-log-line">sudo apt update && sudo apt install nginx -y</div>
+                    <div class="console-log-line cmd"># 4. Change web root ownership so the build runner can upload files without root</div>
+                    <div class="console-log-line">sudo chown -R ubuntu:ubuntu /var/www/html</div>
+                  </div>
+                </div>
+                
+                <p>
+                  Once completed, navigating to your <code>http://&lt;EC2_PUBLIC_IP&gt;</code> in a browser should display the default Nginx Welcome Page. This indicates the server is ready!
+                </p>
+              </div>
+
+              <!-- STEP 4 CONTENT -->
+              <div class="step-pane" id="step-pane-4" style="display: none;">
+                <h3>Configure GitHub Actions Secrets</h3>
+                <p>
+                  GitHub Actions runs on secure, remote runners. To safely upload files to your EC2 instance, you must supply your SSH keys as Encrypted Repository Secrets:
+                </p>
+                <ul>
+                  <li>Go to your GitHub Repository -> <strong>Settings</strong> tab.</li>
+                  <li>On the left sidebar, expand <strong>Secrets and variables</strong> -> select <strong>Actions</strong>.</li>
+                  <li>Click <strong>New repository secret</strong> and add the following:</li>
+                </ul>
+
+                <div style="display: grid; grid-template-columns: 180px 1fr; gap: 0.75rem; margin: 1.5rem 0;">
+                  <div style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--secondary); font-weight: bold;">EC2_HOST</div>
+                  <div style="font-size: 0.9rem; color: var(--text-secondary);">Your AWS EC2 Public IPv4 IP Address.</div>
+                  
+                  <div style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--secondary); font-weight: bold;">EC2_USERNAME</div>
+                  <div style="font-size: 0.9rem; color: var(--text-secondary);">The default SSH username (e.g. <code>ubuntu</code> for Ubuntu OS, or <code>ec2-user</code>).</div>
+                  
+                  <div style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--secondary); font-weight: bold;">EC2_SSH_KEY</div>
+                  <div style="font-size: 0.9rem; color: var(--text-secondary);">The full content of your private key file (<code>.pem</code> file content including headers).</div>
+                </div>
+
+                <div class="alert alert-info">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                  <div>
+                    <strong>Important Security:</strong> Never commit your raw private PEM key or server IPs directly into the code repository. Always use GitHub Secrets!
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Wizard Footer Controls -->
+            <div class="step-footer">
+              <button class="btn" id="btn-prev" onclick="changeStep(-1)" disabled>Previous</button>
+              <button class="btn btn-primary" id="btn-next" onclick="changeStep(1)">Next Step</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: CONFIG GENERATOR -->
+    <section id="generator" class="section">
+      <div class="card">
+        <h2 class="card-title">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          CI/CD Configuration File Generator
+        </h2>
+        <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+          Enter your deployment target parameters below. The tool will auto-generate the configuration files for your selected runner.
+        </p>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="input-ip">EC2 Public IP Address (Host)</label>
+            <input type="text" id="input-ip" class="form-control" placeholder="e.g. 54.210.43.190" value="54.210.43.190">
+          </div>
+          <div class="form-group">
+            <label for="input-user">EC2 SSH Username</label>
+            <input type="text" id="input-user" class="form-control" placeholder="e.g. ubuntu" value="ubuntu">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="input-branch">Target Deploy Branch</label>
+            <input type="text" id="input-branch" class="form-control" placeholder="main" value="main">
+          </div>
+          <div class="form-group">
+            <label for="input-target-dir">EC2 App Destination Directory</label>
+            <input type="text" id="input-target-dir" class="form-control" placeholder="/var/www/html" value="/var/www/html">
+          </div>
+        </div>
+
+        <div class="tab-container" style="margin-top: 2rem;">
+          <button class="tab-btn active" id="btn-gen-actions">GitHub Actions YAML</button>
+          <button class="tab-btn" id="btn-gen-jenkins">Jenkinsfile (Scripted)</button>
+        </div>
+
+        <div class="code-panel">
+          <div class="code-panel-header">
+            <span class="code-panel-title" id="panel-filename">.github/workflows/deploy.yml</span>
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="btn btn-sm" onclick="copyConfigCode()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                Copy
+              </button>
+              <button class="btn btn-sm btn-primary" onclick="writeConfigToWorkspace()">
+                Write to Project File
+              </button>
+            </div>
+          </div>
+          <div class="code-content" id="code-output"></div>
+        </div>
+        <div id="gen-creation-result" class="mt-4" style="font-family: var(--font-mono); font-size: 0.85rem;"></div>
+      </div>
+    </section>
+
+    <!-- SECTION: PIPELINE SIMULATOR -->
+    <section id="simulator" class="section">
+      <div class="card">
+        <h2 class="card-title">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Interactive Pipeline Execution Simulator
+        </h2>
+        <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+          Simulate making a live code change in your editor, committing, and pushing it to GitHub. This console runs a live simulation of the runner checking out files, running tests, establishing SSH with EC2, copying HTML assets, and restarting your Nginx server.
+        </p>
+
+        <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+          <button class="btn btn-success" id="btn-run-sim" onclick="runPipelineSimulation()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+            Trigger Push & Deploy
+          </button>
+          <button class="btn" id="btn-clear-sim" onclick="clearSimulationConsole()">Clear Terminal</button>
+          
+          <div style="margin-left: auto; display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 0.85rem; color: var(--text-secondary);">Simulator Speed:</span>
+            <select id="sim-speed" class="form-control" style="width: 100px; padding: 0.35rem 0.5rem; font-size: 0.85rem;">
+              <option value="1">Normal</option>
+              <option value="2" selected>Fast</option>
+              <option value="5">Turbo</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="console-box">
+          <div class="console-header">
+            <div class="console-dots">
+              <div class="console-dot red"></div>
+              <div class="console-dot yellow"></div>
+              <div class="console-dot green"></div>
+            </div>
+            <span class="console-title" id="sim-runner-title">CI Runner Console - idle</span>
+          </div>
+          <div class="console-body" id="sim-console-body">
+            <div class="console-log-line info">Console ready. Click "Trigger Push & Deploy" to start pipeline.</div>
+          </div>
+        </div>
+
+        <div class="pipeline-diagram" id="sim-diag-bar" style="padding: 1.5rem; display: none;">
+          <div style="width: 100%;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.5rem;">
+              <span id="sim-progress-label">Deployment Progress</span>
+              <span id="sim-progress-percent">0%</span>
+            </div>
+            <div style="width: 100%; height: 6px; background: rgba(255, 255, 255, 0.05); border-radius: 3px; overflow: hidden;">
+              <div id="sim-progress-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--secondary), var(--primary)); box-shadow: 0 0 8px var(--secondary); transition: width 0.3s ease;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
